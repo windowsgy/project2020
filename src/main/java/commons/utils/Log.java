@@ -1,7 +1,6 @@
 package commons.utils;
 
-import commons.structs.alarm.StructAlarm;
-import commons.structs.alarm.StructMonitorData;
+
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.function.Function;
@@ -175,29 +174,6 @@ public class Log implements Serializable {
     }
 
 
-    public static void printFilterStructAlarm(JavaPairRDD<String, StructAlarm> rdd, String filter) {
-        JavaPairRDD<String, StructAlarm> filterRdd = rdd.filter(new Function<Tuple2<String, StructAlarm>, Boolean>() {
-            @Override
-            public Boolean call(Tuple2<String, StructAlarm> stringStructAlarmTuple2) throws Exception {
-                StructAlarm structAlarm = stringStructAlarmTuple2._2;
-                return structAlarm.getAlarmType().equals(filter) ;
-            }
-        }).filter(new Function<Tuple2<String, StructAlarm>, Boolean>() {
-            @Override
-            public Boolean call(Tuple2<String, StructAlarm> stringStructAlarmTuple2) throws Exception {
-                StructAlarm structAlarm = stringStructAlarmTuple2._2;
-                return structAlarm.getLayer().equals("1");
-            }
-        });
-        Log.info(filterRdd.count());
-        filterRdd.foreach(new VoidFunction<Tuple2<String, StructAlarm>>() {
-            @Override
-            public void call(Tuple2<String, StructAlarm> stringStructAlarmTuple2) throws Exception {
-                Log.info(stringStructAlarmTuple2._2);
-            }
-        });
-    }
-
 
     /**
      * 打印RDD
@@ -222,15 +198,5 @@ public class Log implements Serializable {
     }
 
 
-    public static void printMonitorRdd(JavaRDD<StructMonitorData> rdd) {
-     rdd.foreach(new VoidFunction<StructMonitorData>() {
-         @Override
-         public void call(StructMonitorData monitorDataStruct) throws Exception {
-             if(null == monitorDataStruct){
-                 System.out.println("Null");
-             }
-         }
-     });
-    }
 
 }
